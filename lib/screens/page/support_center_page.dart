@@ -7,31 +7,32 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../constants/constants.dart';
 import '../../widget/contact_option.dart';
 
+// ... (imports unchanged)
 
 @RoutePage()
 class SupportCenterPage extends StatefulWidget {
-  const SupportCenterPage({
-    super.key,
-    required this.title,
-  });
+  const SupportCenterPage({super.key, required this.title});
   final String title;
+
   @override
   State<SupportCenterPage> createState() => _SupportCenterPageState();
 }
+
 class _SupportCenterPageState extends State<SupportCenterPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _orgController = TextEditingController();
   final TextEditingController _positionController = TextEditingController();
 
-  final List<String> phoneNumbers = <String>[
-    'tel:+1234567890',
-    'tel:+0987654321',
-    'tel:+1123456789',
-
-    // Add more numbers as needed
+  final List<String> phoneNumbers = [
+    '9942145707',
+    '1234567890',
+    '0987654321',
+    '1122334455',
+    '5566778899',
+    '6677889900',
+    '7788990011',
   ];
-
 
   @override
   void dispose() {
@@ -44,342 +45,73 @@ class _SupportCenterPageState extends State<SupportCenterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final theme = Theme.of(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0),
-        child: SingleChildScrollView(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildHeaderImage(),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "How can we help you?",
+                  style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+            _buildContactOptions(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeaderImage() {
+    return Container(
+      height: 280,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(24),
+          bottomRight: Radius.circular(24),
+        ),
+        image: const DecorationImage(
+          image: AssetImage(Constants.assetMyIcon),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(24),
+            bottomRight: Radius.circular(24),
+          ),
+          gradient: LinearGradient(
+            colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+          ),
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Align(
+          alignment: Alignment.bottomCenter,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Stack(
-                children: [
-                  Container(
-                    height: 280,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(Constants.assetMyIcon),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Container(
-                        height: 60,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.white60,
-                            width: 0,
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(16.0),
-                        alignment: Alignment.bottomLeft,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Text(
-                              "24/7",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            // const Spacer(),
-                            const SizedBox(width: 10),
-                            const Icon(
-                              Icons.circle,
-                              color: Colors.white,
-                              size: 10,
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              widget.title.toUpperCase(),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              const ContactOption(
-                text: "Call Us",
-                icon: Icons.phone,
-                url: '+63 994 214 5707',
-              ),
-              const SizedBox(height: 5),
-              Divider(
-                color: Colors.grey.withOpacity(0.5),
-                thickness: 1.5,
-                endIndent: 20,
-                indent: 20,
-              ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  const SizedBox(width: 20),
-                  const Icon(Icons.email, color: Color(0xFF101820)),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Email Us",
-                    style: TextStyle(
-                      color: Color(0xFF101820),
+              Text(widget.title.toUpperCase(),
+                  style: const TextStyle(
+                      color: Colors.white,
                       fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF00539C),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () {
-                          String? encodeQueryParameters(
-                              Map<String, String> params) {
-                            return params.entries
-                                .map((MapEntry<String, String> e) =>
-                            '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-                                .join('&');
-                          }
-
-                          final Uri emailLaunchUri = Uri(
-                            scheme: 'mailto',
-                            path: 'consult@servoitsolutions.ph',
-                            query: encodeQueryParameters({
-                              'subject': widget.title,
-                              'body': 'Hello, Customer Support Team,'
-                            }),
-                          );
-                          try {
-                            launchUrl(emailLaunchUri);
-                          } catch (e) {
-                            // print(e);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Email is not available',
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.email,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
-              Divider(
-                color: Colors.grey.withOpacity(0.5),
-                thickness: 1.5,
-                endIndent: 20,
-                indent: 20,
-              ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  const SizedBox(width: 20),
-                  const Icon(Icons.message, color: Color(0xFF101820)),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Chat With Us",
-                    style: TextStyle(
-                      color: Color(0xFF101820),
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF00539C),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () async {
-                          // Livechat.beginChat(
-                          //   Constants.licenseNo,
-                          //   Constants.groupId,
-                          //   "Vince",
-                          //   "kervinjumar.kj@gmail.com",
-                          //   <String, String>{'org': "Servo", 'position': "SoftDev"},
-                          // );
-
-                          /// Create alert dialog
-
-                          /// username - textfield
-                          /// email - textfield
-                          /// org - textfield
-                          /// role - textfield
-                          /// button - ok -> call this function _onCallLiveChat()
-
-                          _nameController.clear();
-                          _emailController.clear();
-                          _orgController.clear();
-                          _positionController.clear();
-
-                          _showMyDialog(
-                            context: context,
-                            userName: '',
-                            email: '',
-                            org: '',
-                            position: '',
-                          );
-                        },
-                        icon: const Icon(
-                          Icons.message,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
-              Divider(
-                color: Colors.grey.withOpacity(0.5),
-                thickness: 1.5,
-                endIndent: 20,
-                indent: 20,
-              ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  const SizedBox(width: 20),
-                  const Icon(Icons.location_on, color: Color(0xFF101820)),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Visit Us",
-                    style: TextStyle(
-                      color: Color(0xFF101820),
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF00539C),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () {
-                          final Uri mapLaunchUri = Uri(
-                            scheme: 'https',
-                            path:
-                            'www.google.com/maps/place/Servo+IT+Solutions+Angeles+City+Office/@15.15935,120.596908,15z/data=!4m6!3m5!1s0x3396f31240b2d5e9:0x8a45ca63c3c80a5c!8m2!3d15.1604133!4d120.5973204!16s%2Fg%2F11b5rf1dzm?hl=en-US&entry=ttu&g_ep=EgoyMDI0MDkxOC4xIKXMDSoASAFQAw%3D%3D',
-                          );
-
-                          try {
-                            launchUrl(mapLaunchUri);
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Map is not available',
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.location_on,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
-              const SizedBox(height: 5),
-              Divider(
-                color: Colors.grey.withOpacity(0.5),
-                thickness: 1.5,
-                endIndent: 20,
-                indent: 20,
-              ),
-              const SizedBox(height: 5),
-              Row(
-                children: [
-                  const SizedBox(width: 20),
-                  const Icon(Icons.help, color: Color(0xFF101820)),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "FAQs",
-                    style: TextStyle(
-                      color: Color(0xFF101820),
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF00539C),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                        onPressed: () {
-                          final Uri mapLaunchUri = Uri(
-                            scheme: 'https',
-                            path: 'servoitsolutions.ph/support/kb/index.php',
-                          );
-                          try {
-                            launchUrl(mapLaunchUri);
-                          } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Sorry no Connection',
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.help,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                ],
-              ),
-              Divider(
-                color: Colors.grey.withOpacity(0.5),
-                thickness: 1.5,
-                endIndent: 20,
-                indent: 20,
-              ),
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2)),
+              const SizedBox(height: 6),
+              const Text("24/7 Support Available", style: TextStyle(color: Colors.white70)),
             ],
           ),
         ),
@@ -387,129 +119,252 @@ class _SupportCenterPageState extends State<SupportCenterPage> {
     );
   }
 
-  Future<void> _showMyDialog({
-    required BuildContext context,
-    required String userName,
-    required String email,
-    required String org,
-    required String position,
-  }) async {
+  Widget _buildContactOptions() {
+    return Column(
+      children: [
+        _buildOptionRow(icon: Icons.phone, label: "Call Us", buttonIcon: Icons.phone, onTap: () => startCalling(phoneNumbers, 0)),
+        _buildDivider(),
+        _buildOptionRow(icon: Icons.email, label: "Email Us", buttonIcon: Icons.email, onTap: _launchEmail),
+        _buildDivider(),
+        _buildOptionRow(icon: Icons.message, label: "Chat With Us", buttonIcon: Icons.message, onTap: _openChatDialog),
+        _buildDivider(),
+        _buildOptionRow(icon: Icons.location_on, label: "Visit Us", buttonIcon: Icons.location_on, onTap: _launchMap),
+        _buildDivider(),
+        _buildOptionRow(icon: Icons.help, label: "FAQs", buttonIcon: Icons.help, onTap: _launchFAQ),
+        _buildDivider(),
+      ],
+    );
+  }
+
+  Widget _buildOptionRow({
+    required IconData icon,
+    required String label,
+    required IconData buttonIcon,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      splashColor: theme.primaryColor.withOpacity(0.2),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20),
+        child: Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: theme.primaryColor,
+                boxShadow: [
+                  BoxShadow(color: Colors.black26, blurRadius: 6, offset: const Offset(2, 2)),
+                ],
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Icon(icon, color: Colors.white, size: 20),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Text(label, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600)),
+            ),
+            Material(
+              color: const Color(0xFF2A2F92),
+              borderRadius: BorderRadius.circular(12),
+              elevation: 4,
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                  height: 48,
+                  width: 48,
+                  child: Icon(buttonIcon, color: Colors.white, size: 26),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDivider() => Divider(
+    color: Theme.of(context).dividerColor.withOpacity(0.5),
+    thickness: 1.5,
+    endIndent: 20,
+    indent: 20,
+  );
+
+  void _launchEmail() async {
+    final Uri emailLaunchUri = Uri(
+      scheme: 'mailto',
+      path: 'consult@servoitsolutions.ph',
+      queryParameters: {
+        'subject': widget.title,
+        'body': 'Hello, Customer Support Team,',
+      },
+    );
+
+    try {
+      final launched = await launchUrl(emailLaunchUri);
+      if (launched) {
+        _showSuccess('Email app opened. Please send your message.');
+      } else {
+        _showError('Email is not available');
+      }
+    } catch (_) {
+      _showError('Email is not available');
+    }
+  }
+
+  void _launchMap() {
+    final Uri mapLaunchUri = Uri.parse('https://www.google.nl/maps/place/...'); // Use valid link
+    _launchUri(mapLaunchUri, 'Map is not available');
+  }
+
+  void _launchFAQ() {
+    final Uri faqLaunchUri = Uri.parse('https://servoitsolutions.ph/support/kb/index.php');
+    _launchUri(faqLaunchUri, 'Sorry, no connection');
+  }
+
+  Future<void> _launchUri(Uri uri, String errorMessage) async {
+    try {
+      if (!await launchUrl(uri)) {
+        _showError(errorMessage);
+      }
+    } catch (_) {
+      _showError(errorMessage);
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.redAccent,
+        margin: const EdgeInsets.all(12),
+      ),
+    );
+  }
+
+  void _showSuccess(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: const Color(0xFFFFA500),
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(12),
+      ),
+    );
+  }
+
+  void _openChatDialog() {
+    _nameController.clear();
+    _emailController.clear();
+    _orgController.clear();
+    _positionController.clear();
+
+    _showMyDialog();
+  }
+
+  void startCalling(List<String> numbers, int index) async {
+    if (index >= numbers.length) {
+      _showError("All numbers failed to launch.");
+      return;
+    }
+
+    final currentNumber = numbers[index];
+    final Uri launchUri = Uri(scheme: 'tel', path: currentNumber);
+
+    _showSuccess("Attempting to call: $currentNumber");
+
+    try {
+      final canCall = await canLaunchUrl(launchUri);
+      if (canCall) {
+        final launched = await launchUrl(launchUri);
+        if (!launched) {
+          startCalling(numbers, index + 1);
+        }
+      } else {
+        startCalling(numbers, index + 1);
+      }
+    } catch (_) {
+      startCalling(numbers, index + 1);
+    }
+  }
+
+  Future<void> _showMyDialog() async {
+    final theme = Theme.of(context);
+
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Fill up the information'),
+          backgroundColor: theme.dialogBackgroundColor,
+          title: Text('Fill up the information', style: theme.textTheme.titleLarge),
           content: SingleChildScrollView(
             child: ListBody(
-              children: <Widget>[
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(6),
-                  child: TextFormField(
-                    controller: _nameController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: "Name",
-                      labelStyle: TextStyle(
-                        color: Colors.black12,
-                        fontSize: 12.0.sp,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0).r,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(6),
-                  child: TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: "Email",
-                      labelStyle: TextStyle(
-                        color: Colors.black12,
-                        fontSize: 12.0.sp,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0).r,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(6),
-                  child: TextFormField(
-                    controller: _orgController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: "org",
-                      labelStyle: TextStyle(
-                        color: Colors.black12,
-                        fontSize: 12.0.sp,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0).r,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  padding: const EdgeInsets.all(6),
-                  child: TextFormField(
-                    controller: _positionController,
-                    keyboardType: TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: "Position",
-                      labelStyle: TextStyle(
-                        color: Colors.black12,
-                        fontSize: 12.0.sp,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0).r,
-                      ),
-                    ),
-                  ),
-                ),
-
-
+              children: [
+                _buildTextField(_nameController, "Name", Icons.person),
+                _buildTextField(_emailController, "Email", Icons.email),
+                _buildTextField(_orgController, "Organization", Icons.business),
+                _buildTextField(_positionController, "Position", Icons.work),
               ],
             ),
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
               child: const Text('Cancel'),
-              onPressed: () {
-                context.router.maybePop();
-              },
+              onPressed: () => Navigator.of(context).pop(), // ✅ fixed line
             ),
             TextButton(
               child: const Text('Approve'),
               onPressed: () async {
-                // Livechat.beginChat(
-                //   Constants.licenseNo,
-                //   Constants.groupId,
-                //   'Vincent',
-                //   'gardosupremo02@gmail.com',
-                //   <String, String>{'org': 'Servo IT Solutions', 'position': 'Software Developer'},
-                // );
+                if (_nameController.text.trim().isEmpty || _emailController.text.trim().isEmpty) {
+                  _showError("Name and Email are required.");
+                  return;
+                }
 
-                context.router.maybePop();
-                _onCallLiveChat(
-                  userName: _nameController.text.toString().trim(),
-                  email: _emailController.text.toString().trim(),
-                  org: _orgController.text.toString().trim(),
-                  position: _positionController.text.toString().trim(),
+                Navigator.of(context).pop();
+
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (_) => const Center(child: CircularProgressIndicator()),
                 );
+
+                await _onCallLiveChat(
+                  userName: _nameController.text.trim(),
+                  email: _emailController.text.trim(),
+                  org: _orgController.text.trim(),
+                  position: _positionController.text.trim(),
+                );
+
+                Navigator.of(context).pop(); // remove loader
               },
             ),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, IconData icon) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(6),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+          prefixIcon: Icon(icon),
+          labelText: label,
+          filled: true,
+          fillColor: Colors.grey.shade100,
+          labelStyle: theme.textTheme.bodySmall,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
     );
   }
 
@@ -524,7 +379,7 @@ class _SupportCenterPageState extends State<SupportCenterPage> {
       groupId: Constants.groupId,
       visitorName: userName,
       visitorEmail: email,
-      customParams: <String, String>{'org': org, 'position': position},
+      customParams: {'org': org, 'position': position},
     );
   }
 }
